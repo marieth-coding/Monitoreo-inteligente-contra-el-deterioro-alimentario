@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Galería Santa Elena · Monitoreo Inteligente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    <img src="img/logo univalle.png" alt="Logo Galería Santa Elena" class="brand-logo">
+    <div class="brand-text">
+      <h1>Galería Santa Elena</h1>
+      <p>Monitoreo inteligente contra el deterioro alimentario</p>
+    </div>
+  </div>
+  <nav class="stall-nav" aria-label="Secciones del prototipo">
+    <button class="stall-btn active" data-target="puesto-1">
+      <span class="stall-num">Puesto 01</span>
+      <span class="stall-label">Empaque &amp; Sensores</span>
+    </button>
+    <button class="stall-btn" data-target="puesto-2">
+      <span class="stall-num">Puesto 02</span>
+      <span class="stall-label">Registro &amp; Capacitación</span>
+    </button>
+    <button class="stall-btn" data-target="puesto-3">
+      <span class="stall-num">Puesto 03</span>
+      <span class="stall-label">Modelo Predictivo</span>
+    </button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ===================== PUESTO 1 ===================== -->
+  <section id="puesto-1" class="puesto active">
+    <div class="puesto-intro">
+      <h2>El empaque que avisa antes de que sea tarde</h2>
+      <p>Arrastra para girar el prototipo, usa la rueda del mouse para hacer zoom. Toca cada etiqueta para conocer qué hace cada parte del sistema.</p>
+    </div>
+
+    <div class="viewer-wrap">
+      <canvas id="scene3d" aria-label="Modelo 3D interactivo del empaque textil y los microcontroladores"></canvas>
+      <p class="viewer-hint">🖱️ Arrastra · Rueda = zoom</p>
+
+      <div class="hotspots" id="hotspots">
+        <button class="hotspot" data-target="empaque">Empaque textil</button>
+        <button class="hotspot" data-target="indicador">Indicador colorimétrico</button>
+        <button class="hotspot" data-target="nodemcu">NodeMCU</button>
+        <button class="hotspot" data-target="dht22">Sensor DHT22</button>
+      </div>
+    </div>
+
+    <div class="info-panel" id="info-panel">
+      <div class="info-card active" data-card="empaque">
+        <h3>Empaque textil reutilizable</h3>
+        <p>La tela de polipropileno (comúnmente conocida como friselina, tela no tejida o TNT) es un material clave en el diseño de empaques inteligentes y sostenibles para la conservación y transporte de frutas y verduras.</p>
+      </div>
+      <div class="info-card" data-card="indicador">
+        <h3>Indicador colorimétrico</h3>
+        <p>Detecta vapores de etanol producidos durante la fermentación de frutas como fresas y mangos. Cambia de color para que el vendedor identifique visualmente el inicio del deterioro antes de que sea evidente a simple vista. El anillo de luz en el modelo señala dónde va ubicado el sensor sobre el empaque real.</p>
+        <button id="toggle-indicador" class="mini-btn">Simular detección de deterioro</button>
+      </div>
+      <div class="info-card" data-card="nodemcu">
+        <h3>NodeMCU con WiFi</h3>
+        <p>Microcontrolador de bajo costo que envía los datos de los sensores a la nube en tiempo real. Se programa fácilmente desde Arduino IDE, sin necesitar conocimientos avanzados en electrónica.</p>
+      </div>
+      <div class="info-card" data-card="dht22">
+        <h3>Sensor DHT22</h3>
+        <p>Mide temperatura y humedad en el puesto de venta con precisión suficiente para detectar variaciones relevantes en productos perecederos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PUESTO 2 ===================== -->
+  <section id="puesto-2" class="puesto">
+    <div class="puesto-intro">
+      <h2>Registro de alimentos y capacitaciones</h2>
+      <p>Registra el ingreso de cada producto y consulta las capacitaciones disponibles para el manejo higiénico de alimentos.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="panel">
+        <h3>Registro de ingreso de producto</h3>
+        <form id="registro-form">
+          <label>
+            Producto
+            <input type="text" id="r-producto" placeholder="Ej. Fresas" required>
+          </label>
+          <label>
+            Codigo de mercancia (DIAN)
+            <input type="text" id="r-vendedor" placeholder="Ej. 0921.21.20.00 (Café tostado, no descafeinado])" required>
+          </label>
+          <label>
+            Tipo de alimento
+            <select id="r-tipo">
+              <option>Fruta</option>
+              <option>Verdura</option>
+              <option>Lácteo</option>
+              <option>Cárnico</option>
+              <option>Otro</option>
+            </select>
+          </label>
+          <button type="submit" class="mini-btn primary">Registrar ingreso</button>
+        </form>
+
+        <table class="registro-table">
+          <thead>
+            <tr><th>Producto</th><th>C. Mercancia</th><th>Ingreso</th><th>Tiempo transcurrido</th><th>Estado</th></tr>
+          </thead>
+          <tbody id="registro-body">
+            <tr class="empty-row"><td colspan="5">Aún no hay productos registrados.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <h3>Capacitaciones recomendadas</h3>
+        <p class="panel-sub">Talleres de una duración aproximada de 40h. Organizados por entidades como el SENA, de acceso gratuito.</p>
+
+        <div class="capacitacion-list" id="capacitacion-list">
+          <details class="capacitacion" open>
+            <summary>Conservación de Frutas y Verduras</summary>
+            <p>Principios básicos de conservación de productos hortofrutícolas, manejo de la poscosecha (vital para entender por qué se daña la fruta en el transporte), higiene en la manipulación y aplicación de diferentes métodos de conservación.</p>
+          </details>
+          <details class="capacitacion">
+            <summary>Protección y Conservación de Alimentos</summary>
+            <p>Generalidades de los contaminantes (físicos, químicos y biológicos), Enfermedades Transmitidas por Alimentos (ETAs), y aseguramiento de la calidad.</p>
+          </details>
+          <details class="capacitacion">
+            <summary>Higiene y Manipulación de Alimentos</summary>
+            <p>Normatividad higiénico-sanitaria vigente (Resolución 2674 de 2013), Buenas Prácticas de Manufactura (BPM), limpieza, desinfección y almacenamiento/transporte seguro.</p>
+          </details>
+          <details class="capacitacion">
+            <summary>Procesamiento de Frutas y Verduras / Manejo de Cosecha y Poscosecha</summary>
+            <p>Operaciones de adecuación de la fruta (lavado, selección) y técnicas de empaque o transformación para evitar mermas.</p>
+          </details>
+        </div>
+
+        <a class="mini-btn" href="https://zajuna.sena.edu.co/" >Solicitar un taller (Se recomienda abrir en otra pestaña)</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PUESTO 3 ===================== -->
+  <section id="puesto-3" class="puesto">
+    <div class="puesto-intro">
+      <h2>Modelo predictivo de deterioro</h2>
+      <p>Prototipo ilustrativo: mueve los controles para ver cómo la temperatura, la humedad y la temporada afectan el tiempo estimado de vida útil de un producto perecedero.</p>
+    </div>
+
+    <div class="two-col">
+      <div class="panel controls-panel">
+        <label class="slider-label">
+          <span class="slider-text">Temperatura ambiente: <span id="val-temp">28</span>°C</span>
+          <input type="range" id="ctl-temp" min="4" max="38" value="28">
+        </label>
+        <label class="slider-label">
+          <span class="slider-text">Humedad relativa: <span id="val-hum">70</span>%</span>
+          <input type="range" id="ctl-hum" min="30" max="95" value="70">
+        </label>
+        <label class="slider-label">
+          Temporada
+          <select id="ctl-temporada">
+            <option value="seca">Seca</option>
+            <option value="lluvias">Lluvias</option>
+          </select>
+        </label>
+
+        <div class="prediction-result">
+          <span class="prediction-figure" id="prediction-hours">—</span>
+          <span class="prediction-unit">horas estimadas de vida útil</span>
+        </div>
+        <p class="disclaimer">Modelo heurístico simplificado (tipo Q10), construido a partir de los datos de los sensores DHT22. No reemplaza pruebas de laboratorio.</p>
+      </div>
+
+      <div class="panel">
+        <h3>Curva estimada de deterioro</h3>
+        <svg id="chart-predictivo" viewBox="0 0 400 260" preserveAspectRatio="none" style="width:100%;height:260px;display:block;"></svg>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <p>Prototipo académico Hecho por: Isabella Idrobo Martínez, Miguel Angel Rios Corrales, Marieth Leguizamo Fajardo — Taller de Ingeniería, Universidad del Valle.</p>
+</footer>
+
+<script type="module" src="script.js"></script>
+</body>
+</html>
